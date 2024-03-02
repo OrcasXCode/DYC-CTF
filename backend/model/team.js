@@ -52,29 +52,32 @@ const ParticipantSchema = new mongoose.Schema({
   },
 });
 
-const TeamSchema = new mongoose.Schema({
-  teamName: {
-    type: String,
-    required: true,
+const TeamSchema = new mongoose.Schema(
+  {
+    teamName: {
+      type: String,
+      required: true,
+    },
+    teamLeaderName: {
+      type: String,
+      required: true,
+    },
+    teamLeaderId: {
+      type: Number,
+      required: true,
+    },
+    teamLeaderNo: {
+      type: Number,
+      required: true,
+    },
+    teamLeaderEmail: {
+      type: String,
+      required: true,
+    },
+    members: [ParticipantSchema],
   },
-  teamLeaderName: {
-    type: String,
-    required: true,
-  },
-  teamLeaderId: {
-    type: Number,
-    required: true,
-  },
-  teamLeaderNo: {
-    type: Number,
-    required: true,
-  },
-  teamLeaderEmail: {
-    type: String,
-    required: true,
-  },
-  members: [ParticipantSchema],
-});
+  { timestamps: true }
+);
 
 const Team = mongoose.model("Team", TeamSchema);
 module.exports = {

@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle } from 'lucide-react';
 import dyc from './assets/dyc.png';
 import lpu from './assets/lpu.png';
-import code from './assets/code.png';
+import axios from 'axios';
 
 export function App() {
   const [teamName, setTeamName] = useState('');
   const [teamLeaderName, setTeamLeaderName] = useState('');
   const [teamLeaderEmail, setTeamLeaderEmail] = useState('');
-  const [teamLeaderId, setTeamLeaderId] = useState('');
-  const [teamLeaderContactNo, setTeamLeaderContactNo] = useState('');
+  const [teamLeaderId, setTeamLeaderId] = useState(null);
+  const [teamLeaderContactNo, setTeamLeaderContactNo] = useState(null);
   const [participants, setParticipants] = useState([]);
   let count = 1; // Initialize count outside of the function
 
@@ -34,6 +34,38 @@ export function App() {
     setParticipants(updatedParticipants);
     count--; // Decrement count when removing a participant
   };
+
+ const handleSubmit = () => {
+  // Prepare members array with the required format
+  const membersArray = participants.map(participant => ({
+    name: participant.name,
+    email: participant.email,
+    id: participant.id,
+    phoneNumber: participant.contactNo
+  }));
+
+  // Prepare data to send
+  const dataToSend = {
+    teamName: teamName,
+    teamLeaderName: teamLeaderName,
+    teamLeaderEmail: teamLeaderEmail,
+    teamLeaderNo: teamLeaderContactNo,
+    teamLeaderId: teamLeaderId,
+    members: membersArray
+  };
+
+  axios
+    .post('http://localhost:3000/user/register', dataToSend)
+    .then((response) => {
+      console.log('Registration successful:', response.data);
+      alert("Registration done")
+    })
+    .catch((error) => {
+      console.error('Error occurred while registering:', error);
+      alert("Registration Error")
+    });
+};
+
 
   return (
     <section className='bg-black'>
@@ -96,7 +128,7 @@ export function App() {
                       type='text'
                       placeholder='123****7'
                       value={teamLeaderId}
-                      onChange={(e) => setTeamLeaderId(e.target.value)}
+                      onChange={(e) => setTeamLeaderId(parseInt(e.target.value))}
                     ></input>
                   </div>
                 </div>
@@ -128,7 +160,7 @@ export function App() {
                       type='text'
                       placeholder='Contact No'
                       value={teamLeaderContactNo}
-                      onChange={(e) => setTeamLeaderContactNo(e.target.value)}
+                      onChange={(e) => setTeamLeaderContactNo(parseInt(e.target.value))}
                     ></input>
                   </div>
                 </div>
@@ -164,7 +196,7 @@ export function App() {
                           type='text'
                           placeholder='123****7'
                           value={participants[index].id}
-                          onChange={(e) => handleParticipantChange(index, 'id', e.target.value)}
+                          onChange={(e) => handleParticipantChange(index, 'id', parseInt(e.target.value))}
                         ></input>
                       </div>
                     </div>
@@ -196,7 +228,7 @@ export function App() {
                           type='text'
                           placeholder='Contact No'
                           value={participants[index].contactNo}
-                          onChange={(e) => handleParticipantChange(index, 'contactNo', e.target.value)}
+                          onChange={(e) => handleParticipantChange(index, 'contactNo', parseInt(e.target.value))}
                         ></input>
                       </div>
                     </div>
@@ -217,9 +249,7 @@ export function App() {
               )}
               <button
                 type='button'
-                onClick={()=>{
-                  
-                }}
+                onClick={handleSubmit}
                 className='inline-flex w-full items-center justify-center rounded-md bg-white px-3.5 py-2.5 font-semibold leading-7 text-black'
               >
                 Register <ArrowRight className='ml-2' size={16} />
