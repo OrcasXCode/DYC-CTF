@@ -71,13 +71,13 @@ export function App() {
     <section className='bg-black'>
       <nav className='flex h-[100px] font-bold w-full justify-between '>
         <img src={dyc} className='mr-3 h-25' alt='Logo' />
-        <img src={lpu} className='mr-3 h-25' alt='Logo' />
+        <img src={lpu} className='mr-3 h-20' alt='Logo' />
       </nav>
       <div className='text-white flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-30'>
         <div className='h-full w-full mx-auto'>
-          <h2 className='text-center text-6xl font-bold leading-tight' style={{ fontFamily: 'oswald' }}>
-            Code HUNT
-          </h2>
+        <div class="wrap">
+            <div class="glitch" data-text="GLITCH" style={{fontFamily:'oswald'}}>  Code-A-THON  </div> 
+        </div>
           <p className='mt-2 text-center text-xl tracking-wider line-spac' style={{ fontFamily: 'techno' }}>
             Welcome to the CTF (Capture The Flag) registration! Please ensure that all details are entered accurately
             to avoid any inconvenience in the future.
@@ -97,6 +97,7 @@ export function App() {
                     onChange={(e) => setTeamName(e.target.value)}
                   />
                 </div>
+
               </div>
               {/* {Team Leader} */}
               <div className='flex items-center flex-wrap justify-between lg:space-x-5'>
@@ -126,7 +127,7 @@ export function App() {
                     <input
                       className='flex h-10  w-[300px] rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50'
                       type='text'
-                      placeholder='123****7'
+                      placeholder='ex: 122***86'
                       value={teamLeaderId}
                       onChange={(e) => setTeamLeaderId(parseInt(e.target.value))}
                     ></input>
@@ -163,7 +164,11 @@ export function App() {
                       onChange={(e) => setTeamLeaderContactNo(parseInt(e.target.value))}
                     ></input>
                   </div>
+                  
                 </div>
+                <button className='mt-10' type='button' onClick={() => handleParticipantRemove(index)}>
+                      <Trash2 className='text-black'></Trash2>
+                    </button>
               </div>
               {participants.map((participant, index) => (
                 <div key={index}>
@@ -194,7 +199,7 @@ export function App() {
                         <input
                           className='flex h-10  w-[300px] rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm  focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50'
                           type='text'
-                          placeholder='123****7'
+                          placeholder='Registration No'
                           value={participants[index].id}
                           onChange={(e) => handleParticipantChange(index, 'id', parseInt(e.target.value))}
                         ></input>
