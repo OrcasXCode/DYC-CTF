@@ -1,36 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const TeamSchema = new mongoose.Schema({
-//   TeamName: {
-//     type: String,
-//     required: true,
-//   },
-//   TeamLeaderName: {
-//     type: String,
-//     required: true,
-//   },
-//   TeamLeaderId: {
-//     type: Number,
-//     required: true,
-//   },
-//   TeamLeaderNo: {
-//     type: Number,
-//     required: true,
-//   },
-//   TeamLeaderEmail: {
-//     type: String,
-//     required: true,
-//   },
-//   Members: [
-//     participant
-//   ]
-// });
-
-// const Team = mongoose.model("Team", TeamSchema);
-// module.exports = {
-//   Team,
-// };
-
 const mongoose = require("mongoose");
 
 const ParticipantSchema = new mongoose.Schema({
@@ -39,11 +6,11 @@ const ParticipantSchema = new mongoose.Schema({
     required: true,
   },
   id: {
-    type: Number,
+    type: String,
     required: true,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   email: {
@@ -63,11 +30,11 @@ const TeamSchema = new mongoose.Schema(
       required: true,
     },
     teamLeaderId: {
-      type: Number,
+      type: String,
       required: true,
     },
     teamLeaderNo: {
-      type: Number,
+      type: String,
       required: true,
     },
     teamLeaderEmail: {

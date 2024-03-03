@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle } from 'lucide-react';
 import dyc from './assets/dyc.png';
+import dycb from './assets/DYCB.png';
 import lpu from './assets/lpu.png';
 import axios from 'axios';
 
@@ -35,36 +36,196 @@ export function App() {
     count--; // Decrement count when removing a participant
   };
 
- const handleSubmit = () => {
-  // Prepare members array with the required format
-  const membersArray = participants.map(participant => ({
-    name: participant.name,
-    email: participant.email,
-    id: participant.id,
-    phoneNumber: participant.contactNo
-  }));
+const handleSubmit = async () => {
+    // Validate inputs
+    if (
+      !teamName ||
+      !teamLeaderName ||
+      !teamLeaderId ||
+      !teamLeaderEmail ||
+      !teamLeaderContactNo ||
+      participants.some(participant => !participant.name || !participant.id || !participant.email || !participant.contactNo)
+    ) {
+      alert("All fields are required");
+      return;
+    }
 
-  // Prepare data to send
-  const dataToSend = {
-    teamName: teamName,
-    teamLeaderName: teamLeaderName,
-    teamLeaderEmail: teamLeaderEmail,
-    teamLeaderNo: teamLeaderContactNo,
-    teamLeaderId: teamLeaderId,
-    members: membersArray
+    // Prepare members array with the required format
+    const membersArray = participants.map(participant => ({
+      name: participant.name,
+      email: participant.email,
+      id: participant.id,
+      phoneNumber: participant.contactNo
+    }));
+
+    // Prepare data to send
+    const dataToSend = {
+      teamName: teamName,
+      teamLeaderName: teamLeaderName,
+      teamLeaderEmail: teamLeaderEmail,
+      teamLeaderNo: teamLeaderContactNo,
+      teamLeaderId: teamLeaderId,
+      members: membersArray
+    };
+
+    try {
+
+      const response = await axios.post('http://localhost:3000/user/register', dataToSend);
+      const responseData = response.data;
+      console.log(responseData)
+
+      if (responseData) {
+        const amount = 20000;
+        const currency = "INR";
+        const receiptId = "qwsaq1";
+
+        const paymentResponse = await fetch("http://localhost:3000/user/order", {
+          method: "POST",
+          body: JSON.stringify({
+            amount,
+            currency,
+            receipt: receiptId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const order = await paymentResponse.json();
+        console.log(order);
+
+        var options = {
+      key: "rzp_test_Hvy5xfrAb6RSaj",
+      amount, 
+      currency,
+      name: "Department Of Youth Capital", 
+      description: "Test Transaction",
+      image: dycb,
+      order_id: order.id, 
+      handler: async function (response) {
+        const body = {
+          ...response,
+        };
+
+        const validateRes = await fetch(
+          "http://localhost:3000/user/order/validate",
+          {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const jsonRes = await validateRes.json();
+        console.log(jsonRes);
+        },
+        prefill: {
+          //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+          name: "Web Dev Matrix", //your customer's name
+          email: "webdevmatrix@example.com",
+          contact: "9000000000", //Provide the customer's phone number for better conversion rates
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      rzp1.open();
+      e.preventDefault();
+    } 
+    else {
+        alert(responseData.msg);
+    }
+    } catch (error) {
+      console.error('Error occurred while processing registration:', error);
+      alert("Error occurred while processing registration");
+    }
   };
 
-  axios
-    .post('http://localhost:3000/user/register', dataToSend)
-    .then((response) => {
-      console.log('Registration successful:', response.data);
-      alert("Registration done")
-    })
-    .catch((error) => {
-      console.error('Error occurred while registering:', error);
-      alert("Registration Error")
-    });
-};
+  // const amount = 20000;
+  // const currency = "INR";
+  // const receiptId = "qwsaq1";
+
+  // const paymentHandler = async (e) => {
+  //   const response = await fetch("http://localhost:3000/user/order", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       amount,
+  //       currency,
+  //       receipt: receiptId,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   const order = await response.json();
+  //   console.log(order);
+
+  //   var options = {
+  //     key: "rzp_test_Hvy5xfrAb6RSaj", // Enter the Key ID generated from the Dashboard
+  //     amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  //     currency,
+  //     name: "Department Of Youth Capital", //your business name
+  //     description: "Test Transaction",
+  //     image: dycb,
+  //     order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+  //     handler: async function (response) {
+  //       const body = {
+  //         ...response,
+  //       };
+
+  //       const validateRes = await fetch(
+  //         "http://localhost:3000/user/order/validate",
+  //         {
+  //           method: "POST",
+  //           body: JSON.stringify(body),
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       const jsonRes = await validateRes.json();
+  //       console.log(jsonRes);
+  //     },
+  //     prefill: {
+  //       //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+  //       name: "Web Dev Matrix", //your customer's name
+  //       email: "webdevmatrix@example.com",
+  //       contact: "9000000000", //Provide the customer's phone number for better conversion rates
+  //     },
+  //     notes: {
+  //       address: "Razorpay Corporate Office",
+  //     },
+  //     theme: {
+  //       color: "#3399cc",
+  //     },
+  //   };
+  //   var rzp1 = new window.Razorpay(options);
+  //   rzp1.on("payment.failed", function (response) {
+  //     alert(response.error.code);
+  //     alert(response.error.description);
+  //     alert(response.error.source);
+  //     alert(response.error.step);
+  //     alert(response.error.reason);
+  //     alert(response.error.metadata.order_id);
+  //     alert(response.error.metadata.payment_id);
+  //   });
+  //   rzp1.open();
+  //   e.preventDefault();
+  // };
+
 
 
   return (
