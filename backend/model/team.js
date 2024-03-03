@@ -25,6 +25,9 @@ const TeamSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    teamId: {
+      type: String,
+    },
     teamLeaderName: {
       type: String,
       required: true,

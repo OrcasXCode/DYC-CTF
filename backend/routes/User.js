@@ -5,6 +5,23 @@ const { Team } = require("../model/team");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
+const generateUniqueTeamId = async () => {
+  let teamId = "";
+  let isUnique = false;
+
+  while (!isUnique) {
+    teamId = Math.floor(100000 + Math.random() * 900000)
+      .toString()
+      .substring(0, 6);
+    const existingTeam = await Team.findOne({ teamId });
+    if (!existingTeam) {
+      isUnique = true;
+    }
+  }
+
+  return teamId;
+};
+
 router.post("/register", async (req, res) => {
   try {
     const {
@@ -24,19 +41,22 @@ router.post("/register", async (req, res) => {
       !members
     ) {
       return res
-        .status(401)
+        .status(400)
         .json({ success: false, msg: "All fields are required" });
     }
     try {
-      console.log(req.body);
       TeamCreate.parse(req.body);
     } catch (error) {
       console.log(error);
       return res.status(400).json({ success: false, msg: error.message });
     }
 
+    // Generate a unique 6-digit random number as team ID
+    const teamId = await generateUniqueTeamId();
+
     const newTeam = await Team.create({
       teamName,
+      teamId, // Assign the generated team ID
       teamLeaderName,
       teamLeaderId,
       teamLeaderEmail,
