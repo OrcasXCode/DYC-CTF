@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle,IndianRupee  } from 'lucide-react';
 import dyc from './assets/dyc.png';
+import dycb from './assets/dycb.png';
 import upgrad from './assets/upgrad.png';
 import lpu from './assets/lpu.png';
 import code from './assets/glitch.mp4';
@@ -40,6 +41,7 @@ export function App() {
   };
 
 const handleSubmit = async () => {
+  const loadingToast = toast.loading("Verifying Credentials...");
   if (
     !teamName ||
     !teamLeaderName ||
@@ -85,6 +87,7 @@ const handleSubmit = async () => {
 
     if(responseData){
       setPayNow(true);
+       toast.success("Credentials Verified");
     }
     else{
       toast.error(responseData.msg);
@@ -93,85 +96,96 @@ const handleSubmit = async () => {
     console.error("Error occurred while processing registration:", error);
     toast.error("Error while registration");
   }
+  finally {
+      // Close the loading spinner toast when sign-in completes
+      toast.dismiss(loadingToast);
+    }
 };
 
 const handlePayment = async () => {
-    // Write your payment logic here
-    // For example, you can redirect to a payment gateway or use a payment API
-    // Once payment is successful, navigate to the success page
-    // Ensure to handle errors and edge cases appropriately
-    
-    // if (responseData) {
-    //   const amount = 20000;
-    //   const currency = "INR";
-    //   const receiptId = "qwsaq1";
+  const loadingToast = toast.loading("Processing Payment...");
+    try{
+      if (payNow) {
+      const amount = 40000;
+      const currency = "INR";
+      const receiptId = "qwsaq1";
 
-    //   const paymentResponse = await fetch("http://localhost:3000/user/order", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       amount,
-    //       currency,
-    //       receipt: receiptId,
-    //     }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   const order = await paymentResponse.json();
+      const paymentResponse = await fetch("http://localhost:3000/user/order", {
+        method: "POST",
+        body: JSON.stringify({
+          amount,
+          currency,
+          receipt: receiptId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const order = await paymentResponse.json();
   
-    //   var options = {
-    //     key: "rzp_test_Hvy5xfrAb6RSaj",
-    //     amount,
-    //     currency,
-    //     name: "Department Of Youth Capital",
-    //     description: "Test Transaction",
-    //     image: dycb,
-    //     order_id: order.id,
-    //     handler: async function (response) {
-    //       const body = {
-    //         ...response,
-    //       };
+      var options = {
+        key: "rzp_test_Hvy5xfrAb6RSaj",
+        amount,
+        currency,
+        name: "Department Of Youth Capital",
+        description: "Test Transaction",
+        image: dycb,
+        order_id: order.id,
+        handler: async function (response) {
+          const body = {
+            ...response,
+          };
 
-    //       const validateRes = await fetch(
-    //         "http://localhost:3000/user/order/validate",
-    //         {
-    //           method: "POST",
-    //           body: JSON.stringify(body),
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-    //       const jsonRes = await validateRes.json();
-    //       window.location.href = '/success-page';
-    //     },
-    //     prefill: {
-    //       name: "DYC",
-    //       email: "omp164703@gmail.com",
-    //       contact: "9429084446",
-    //     },
-    //     notes: {
-    //       address: "Razorpay Corporate Office",
-    //     },
-    //     theme: {
-    //       color: "#3399cc",
-    //     },
-    //   };
-    //   var rzp1 = new window.Razorpay(options);
-    //   rzp1.on("payment.failed", function (response) {
-    //     alert(response.error.code);
-    //     alert(response.error.description);
-    //     alert(response.error.source);
-    //     alert(response.error.step);
-    //     alert(response.error.reason);
-    //     alert(response.error.metadata.order_id);
-    //     alert(response.error.metadata.payment_id);
-    //   });
-    //   rzp1.open();
-    //   e.preventDefault();
-    // } else {
-    //   toast.error(responseData.msg);
-    // }
+          const validateRes = await fetch(
+            "http://localhost:3000/user/order/validate",
+            {
+              method: "POST",
+              body: JSON.stringify(body),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const jsonRes = await validateRes.json();
+          window.location.href = '/success-page';
+        },
+        prefill: {
+          name: "DYC",
+          email: "omp164703@gmail.com",
+          contact: "9429084446",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      rzp1.open();
+      e.preventDefault();
+      toast.success("Credentials Verified");
+    } else {
+      toast.error(responseData.msg);
+    }
+    }
+    catch(error){
+      console.log(error);
+      toast.error("Paymnt Failed");
+    }
+     finally {
+      // Close the loading spinner toast when sign-in completes
+      toast.dismiss(loadingToast);
+    }
   };
 
 
@@ -186,11 +200,11 @@ const handlePayment = async () => {
         </div>
       </nav>
 
-
-    <div className="relative w-full">
+      
+       <div className="relative w-full">
       <div className="relative isolate z-0 px-6 pt-14 lg:px-8">
         <div className="relative mx-auto  max-w-2xl py-24">
-          <div className="absolute -z-10 transform-gpu ">
+          <div className="absolute -z-10 transform-gpu">
             <video autoPlay muted loop src={code}></video>
           </div>
           <div className="text-center">
@@ -198,7 +212,7 @@ const handlePayment = async () => {
               <div id="glitch" className='text-[40px] lg:text-[70px]' data-text="GLITCH" style={{fontFamily:'oswald'}}>Code-A-THON</div> 
             </div>
             <p className="mt-6 text-lg leading-8 text-white" style={{fontFamily:'oswald'}}>
-              If you think you are the best coder in town, let's test your limits! Welcome to the Capture The Flag registration. Please ensure that all details are entered accurately to avoid any inconvenience in the future.
+              <span className='text-red-600'>If you think you are the best coder in town, let's test your limits! </span>Welcome to the Capture The Flag registration. Please ensure that all details are entered accurately to avoid any inconvenience in the future.
             </p>
           </div>
         </div>
@@ -292,7 +306,7 @@ const handlePayment = async () => {
             
               
               {participants.map((participant, index) => (
-                <div key={index}>
+                <div className='' key={index}>
                    <div className="mt-6 gap-6 space-y-4 md:grid md:grid-cols-5 md:space-y-0">
                 <div className="w-full">
                   <label
@@ -305,7 +319,7 @@ const handlePayment = async () => {
                     className="flex border-gray-300 h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="text"
                     placeholder="Full NamE"
-                    id="firstName"
+                    id="name"
                      onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
                   ></input>
                 </div>
@@ -343,7 +357,7 @@ const handlePayment = async () => {
                 <div className="w-full">
                   <label
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    htmlFor="phoneNumber"
+                    htmlFor="contactNo"
                   >
                    {index + 1 == 0 ? `Team Contact No` : `Participant ${(index + 1)} Contact No`}
                   </label>
@@ -351,15 +365,15 @@ const handlePayment = async () => {
                     className="flex h-10 w-full rounded-md border-gray-300 border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="text"
                     placeholder="Contact No"
-                    id="phoneNumber"
-                     onChange={(e) => handleParticipantChange(index, 'phoneNumber', e.target.value)}
+                    id="contactNo"
+                     onChange={(e) => handleParticipantChange(index, 'contactNo', e.target.value)}
                   ></input>
                 </div>
-                <div className='w-full flex items-center justify-center h-10'>
-                  <button className='mt-10' type='button' onClick={() => handleParticipantRemove(index)}>
+                {/* <div className='w-full mt-[20px]  flex items-center justify-center h-10'> */}
+                  <button className='w-full h-full flex items-end justify-center mt-10' type='button' onClick={() => handleParticipantRemove(index)}>
                     <Trash2 className='text-red-700'></Trash2>
                   </button>
-                </div>
+                {/* </div> */}
               </div>
                 </div>
               ))}
