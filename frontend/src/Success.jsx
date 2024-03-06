@@ -13,7 +13,7 @@ export function Success() {
           <div id="wrap">
               <div id="glitch" className='text-[40px] lg:text-[70px]' data-text="GLITCH" style={{fontFamily:'oswald'}}>Cogratulations Coder !</div> 
             </div>
-          <p className="mt-6 text-lg leading-8 text-gray-100">You have successfully registered for the event. You and your team will soon receive a confirmation email and your tickets for the event.</p>
+          <p className="mt-6 text-lg leading-8 text-gray-100">You have registered for the event.<span className='text-red-600'> Please note that our team will verify your payment and if we find it valid we will send you furthur details on your registered email. </span>Thank You !</p>
         </div>
       </div>
     </div>

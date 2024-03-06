@@ -47,6 +47,10 @@ const TeamSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
     members: [ParticipantSchema],
   },
   { timestamps: true }

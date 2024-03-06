@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle,IndianRupee  } from 'lucide-react';
 import dyc from './assets/dyc.png';
-import dycb from './assets/dycb.png';
 import upgrad from './assets/upgrad.png';
 import lpu from './assets/lpu.png';
 import code from './assets/glitch.mp4';
+import qr from './assets/qr.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -14,6 +14,7 @@ export function App() {
   const [teamLeaderEmail, setTeamLeaderEmail] = useState('');
   const [teamLeaderId, setTeamLeaderId] = useState('');
   const [teamLeaderContactNo, setTeamLeaderContactNo] = useState('');
+  const [transId, settransId] = useState('');
   const [participants, setParticipants] = useState([]);
   const [payNow,setPayNow]=useState(false);
   let count = 1;
@@ -56,7 +57,6 @@ const handleSubmit = async () => {
         !participant.contactNo
     )
   ) {
-    // Validation failed, show error toast and return
     toast.error("Please fill in all required fields.");
     return;
   }
@@ -87,7 +87,7 @@ const handleSubmit = async () => {
 
     if(responseData){
       setPayNow(true);
-       toast.success("Credentials Verified");
+      toast.success("Credentials Verified");
     }
     else{
       toast.error(responseData.msg);
@@ -97,96 +97,68 @@ const handleSubmit = async () => {
     toast.error("Error while registration");
   }
   finally {
-      // Close the loading spinner toast when sign-in completes
       toast.dismiss(loadingToast);
     }
 };
 
 const handlePayment = async () => {
-  const loadingToast = toast.loading("Processing Payment...");
-    try{
-      if (payNow) {
-      const amount = 40000;
-      const currency = "INR";
-      const receiptId = "qwsaq1";
+  const loadingToast = toast.loading("Proccessing Payment...");
+  if (
+    !transId ||
+    !teamName ||
+    !teamLeaderName ||
+    !teamLeaderId ||
+    !teamLeaderEmail ||
+    !teamLeaderContactNo ||
+    participants.some(
+      (participant) =>
+        !participant.name ||
+        !participant.id ||
+        !participant.email ||
+        !participant.contactNo
+    )
+  ) {
+    toast.error("Please fill in all required fields.");
+    return;
+  }
 
-      const paymentResponse = await fetch("http://localhost:3000/user/order", {
-        method: "POST",
-        body: JSON.stringify({
-          amount,
-          currency,
-          receipt: receiptId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const order = await paymentResponse.json();
-  
-      var options = {
-        key: "rzp_test_Hvy5xfrAb6RSaj",
-        amount,
-        currency,
-        name: "Department Of Youth Capital",
-        description: "Test Transaction",
-        image: dycb,
-        order_id: order.id,
-        handler: async function (response) {
-          const body = {
-            ...response,
-          };
+ 
+  const membersArray = participants.map((participant) => ({
+    name: participant.name,
+    email: participant.email,
+    id: participant.id,
+    phoneNumber: participant.contactNo,
+  }));
 
-          const validateRes = await fetch(
-            "http://localhost:3000/user/order/validate",
-            {
-              method: "POST",
-              body: JSON.stringify(body),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const jsonRes = await validateRes.json();
-          window.location.href = '/success-page';
-        },
-        prefill: {
-          name: "DYC",
-          email: "omp164703@gmail.com",
-          contact: "9429084446",
-        },
-        notes: {
-          address: "Razorpay Corporate Office",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-      var rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", function (response) {
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-      });
-      rzp1.open();
-      e.preventDefault();
-      toast.success("Credentials Verified");
-    } else {
-      toast.error(responseData.msg);
+  const dataToSend = {
+    transId:transId,
+    teamName: teamName,
+    teamLeaderName: teamLeaderName,
+    teamLeaderEmail: teamLeaderEmail,
+    teamLeaderNo: teamLeaderContactNo,
+    teamLeaderId: teamLeaderId,
+    members: membersArray,
+  };
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/user/verify-payment",
+      dataToSend
+    );
+    if(response){
+      toast.success("Registered Successfully");
+     window.location.href = "/success-page";
     }
+    else{
+      toast.error("Registration  Failed");
     }
-    catch(error){
-      console.log(error);
-      toast.error("Paymnt Failed");
-    }
-     finally {
-      // Close the loading spinner toast when sign-in completes
+  } catch (error) {
+    toast.error("Error while registration");
+  }
+  finally {
       toast.dismiss(loadingToast);
     }
-  };
+};
 
 
   return (
@@ -218,6 +190,33 @@ const handlePayment = async () => {
         </div>
       </div>
     </div>
+
+
+    <div className="mx-auto max-w-7xl mt-[50px] px-2 py-10 lg:px-0">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:space-x-10">
+        <div className="mb-10 w-full md:w-2/3 lg:mb-0 lg:w-1/2">
+          <img
+            className="h-300px w-300px rounded-md object-cover"
+            src={upgrad}
+            alt="UpGrad Campus"
+          />
+        </div>
+        <div className="w-full md:w-2/3 lg:w-1/2 text-white" style={{fontFamily:'oswald'}}>
+          <p className="text-sm font-bold text-center">Our Sponsers</p>
+          <h2 className="mt-4 text-3xl font-bold text-center">UpGrad Campus</h2>
+          <p className="mt-4 text-center">
+            "UpGrad" is an Indian online higher education platform that offers a variety of programs in collaboration with universities and industry partners.
+            There certification programs are designed for college students and freshers. They offer a placement support program that includes:
+              <span className='text-red-600'> Soft skill training , 
+              Aptitude test , 
+              Mock interviews , 
+              Group discussions ,
+              Three guaranteed interviews with companies</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
 
 
       <div  style={{fontFamily:'oswald'}} className='text-white flex items-center mt-[100px] justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-30'>
@@ -382,7 +381,21 @@ const handlePayment = async () => {
                   <button type='button' onClick={handleParticipantAdd} class="btn one" >Add Participant <PlusCircle className='ml-2' size={16}/></button>
               )}
               <button type='button'  onClick={handleSubmit}  class="btn two">Register Now <ArrowRight className='ml-2' size={16} /></button>
-              {payNow && <button type='button' onClick={handlePayment} class="btn three">Pay <IndianRupee  className='ml-2' size={16}></IndianRupee>400</button>}
+              {payNow && <div className=' flex justify-center'><img src={qr} className='w-[300px] h-[300px]'></img></div>}
+              {payNow && <div> <label
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    htmlFor="transId"
+                  >
+                   UPI Transaction ID
+                  </label>
+                  <input
+                    className="flex h-10 w-full rounded-md border-gray-300 border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="text"
+                    placeholder="UPI Transaction ID"
+                    id="transId"
+                     onChange={(e) => settransId(e.target.value)}
+              ></input></div>}
+              {payNow && <button type='button' onClick={handlePayment} class="btn three">Proceed Payment  <ArrowRight className='ml-2' size={16} /></button>}
             </div>
           </form>
         </div>
