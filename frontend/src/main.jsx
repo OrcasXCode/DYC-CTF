@@ -5,6 +5,7 @@ import './index.css'
 import {  RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Layout } from '../Layout.jsx'
 import { Success } from './Success.jsx'
+import { Register } from './Register.jsx'
 
 const router=createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router=createBrowserRouter([
       {
         path:"/success-page",
         element:<Success></Success>
+      },
+      {
+        path:"/register",
+        element:<Register></Register>
       },
     ]
   }

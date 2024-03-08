@@ -147,6 +147,10 @@
   color: #32e013;
 }
 
+.four{
+  color: #e97b1c;
+}
+
 .btn:hover {
   color: white;
   border: 0;
@@ -172,3 +176,11 @@
   -moz-box-shadow: 10px 10px 99px 6px rgba(185, 231, 105, 1);
   box-shadow: 10px 10px 99px 6px rgba(185, 231, 105, 1);
 }
+.four:hover {
+  background-color: #e97b1c;
+  -webkit-box-shadow: 10px 10px 99px 6px rgb(204, 65, 0);
+  -moz-box-shadow: 10px 10px 99px 6px rgb(199, 80, 25);
+  box-shadow: 10px 10px 99px 6px rgba(199, 80, 25);
+}
+
+
