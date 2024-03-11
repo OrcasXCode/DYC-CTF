@@ -1,6 +1,6 @@
 import React, {  useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import grid from './assets/grid.png';
 import qr from './assets/qr.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
@@ -163,32 +163,35 @@ export function Register(props) {
 
     return (
       <>
-      <div className='bg-black text-white'>
+      <div className='bg-black text-white' style={{ backgroundImage: `url(${grid})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <Toaster></Toaster>
         <div id="wrap" className='flex items-center justify-center'>
-            <div id="glitch" className='text-2xl pt-10 lg:text-[50px]' data-text="GLITCH" style={{fontFamily:'oswald'}}>GUIDLINES FOR REGISTERING</div> 
+            <div id="glitch" className='text-2xl pt-10 lg:text-[50px]' data-text="GLITCH" style={{fontFamily:'oswald',}}>GUIDLINES FOR registering</div> 
         </div>
-      <div className='max-w-7xl mx-auto mt-[70px] items-center justify-center lg:px-[70px]' style={{ fontFamily: 'oswald' }}>
+      <div className='max-w-7xl mx-auto mt-[70px] items-center justify-center lg:px-[70px]' style={{ fontFamily: 'oswald'}}>
         <ul className="list-disc list-inside lg:gap-10]">
-            <li style={{ marginBottom: '10px' }}>Ensure all participants' details are entered correctly.</li>
-            <li style={{ marginBottom: '10px' }}>Provide accurate team leader name, registration ID, email address, and contact number.</li>
-            <li style={{ marginBottom: '10px' }}>Enter each participant's name, registration ID, email address, and contact number.</li>
-            <li style={{ marginBottom: '10px' }}>If adding more than one participant, click "Add Participant" for each additional member.</li>
             <li style={{ marginBottom: '10px' }}>Our team is not responsible for any future inconvenience caused by submitting wrong details.</li>
-            <li>Click "Register Now" to complete the registration process.</li>
+            <li style={{ marginBottom: '10px' }}>Any indiscipline action or inappropriate behaviour may lead to consequences.</li>
+            <li style={{ marginBottom: '10px' }}>Provide accurate team leader name, registration ID, email address, and contact number.</li>
+            <li style={{ marginBottom: '10px' }}>If adding more than one participant, click "Add Participant" for each additional member.</li>
+            <li style={{ marginBottom: '10px' }}>Enter each participant's name, registration ID, email address, and contact number.</li>
+            <li style={{ marginBottom: '10px' }}>Ensure all participants' details are entered correctly.</li>
+            <li style={{ marginBottom: '10px' }}>Click "Register Now" to complete the registration process and further proceed towards to payment process.</li>
+            <li>During the payment process please make sure you provide valid Transaction ID to avoid any further inconvenience.</li>
         </ul>
         </div>
       </div>
-      <div  style={{fontFamily:'oswald'}} className='text-white bg-black flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-30'>
-        <div className='h-full w-full mx-auto bg-black'>
+      <div  style={{fontFamily:'oswald', backgroundImage: `url(${grid})`, backgroundSize: 'cover', backgroundPosition: 'center'}} className='text-white bg-black flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-30'>
+        <div className='h-full w-full mx-auto'>
           <form action='#' method='POST' className='mt-8  w-full flex items-center justify-center'>
             <div className='space-y-10'>
               <div>
                 <label htmlFor='' className='text-base font-medium'>
                   Team Name
-                </label>
+                  </label>
                 <div className='mt-2'>
                    <input
-                    className="flex border-gray-300 h-10  rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex border-gray-300 h-10  rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600  focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="text"
                     placeholder="TEAM NAME"
                     id="firstName"

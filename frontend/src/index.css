@@ -56,7 +56,7 @@
   content: attr(data-text);
   position: absolute;
   left: 3px;
-  text-shadow: -1px 0 red;
+  text-shadow: -1px 0 rgb(255, 255, 255);
   top: 0;
   color: transparent;
   background: transparent;
@@ -69,6 +69,61 @@
 }
 
 #glitch:before {
+  content: attr(data-text);
+  position: absolute;
+  left: 1px;
+  text-shadow: -3px 0 cyan;
+  top: 0;
+  color: transparent;
+  background: transparent;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-anim-2 3s infinite linear alternate-reverse, shift 4s ease-in-out infinite alternate;
+  transform: skewX(0deg);
+  z-index: -1;
+  opacity: .8;
+}
+
+#glitch1 {
+  font-weight: 600;
+  font-weight: 600;
+  color: rgb(255, 0, 0);
+  position: relative;
+  margin: 0 auto;
+  text-shadow: 0px -5px 10px rgb(255, 2, 2), 0px 0px 5px rgba(255, 255, 255, 0), 0px 0px 10px rgba(255, 255, 255, 0), 0px 0px 15px rgba(255, 255, 255, 0), 0px 0px 20px rgba(255, 255, 255, 0);
+  animation: noise-anim-2 3s infinite linear alternate-reverse, shift 4s ease-in-out infinite alternate, blur1 8s ease-in-out infinite alternate;
+  transform: skewX(0deg);
+}
+
+@keyframes blur1 {
+  0%, 40%, 50%, 60%, 90%, 95%, 100% {
+      text-shadow: 0px -5px 10px rgb(255, 0, 0), 0px 0px 5px rgba(255, 255, 255, 0), 0px 0px 10px rgba(255, 255, 255, 0), 2px 1px 15px rgba(100, 240, 255, 0), 0px 0px 20px rgba(255, 255, 255, 0);
+  }
+  45%, 75% {
+      text-shadow: 0px -5px 10px rgb(255, 0, 0), 0px 0px 5px rgb(255, 0, 0), 0px 0px 10px rgb(255, 0, 0), 2px 1px 15px rgb(255, 0, 0), 0px 0px 20px rgb(255, 0, 0);
+  }
+  97.5% {
+      text-shadow: 0px -5px 10px rgba(255, 255, 255, 0), 0px 0px 5px rgba(255, 255, 255, 0), 0px 0px 10px rgba(255, 255, 255, 0), 2px 1px 4px rgba(255, 100, 100, 1), 0px 0px 20px rgba(255, 255, 255, 0);
+  }
+}
+
+#glitch1:after {
+  content: attr(data-text);
+  position: absolute;
+  left: 3px;
+  text-shadow: -1px 0 red;
+  top: 0;
+  color: transparent;
+  background: transparent;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-anim-2 3s infinite linear alternate-reverse, shift 4s ease-in-out infinite alternate;
+  transform: skewX(0deg);
+  z-index: -2;
+  opacity: .7;
+}
+
+#glitch1:before {
   content: attr(data-text);
   position: absolute;
   left: 1px;
@@ -182,5 +237,8 @@
   -moz-box-shadow: 10px 10px 99px 6px rgb(199, 80, 25);
   box-shadow: 10px 10px 99px 6px rgba(199, 80, 25);
 }
+
+
+
 
 
