@@ -1,7 +1,7 @@
 import React, {  useState } from 'react';
 import { ArrowRight, Trash2, PlusCircle} from 'lucide-react';
 import grid from './assets/grid.png';
-import qr from './assets/qr.png';
+import qr from './assets/qr.jpg';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 

@@ -179,7 +179,7 @@ const faq = [
     </div>
 
 
-    <div id='register' className="mx-autos max-w-9xl px-2 py-10 lg:px-0 flex items-center justify-center bg-black" style={{fontFamily:'oswald',backgroundImage: `url(${grid})`,backgroundSize: 'cover', backgroundPosition: 'center', fontFamily:'oswald'}}>
+    <div id='register' className="mx-autos max-w-9xl px-2 py-10 lg:px-0 flex items-center justify-center bg-black" style={{fontFamily:'oswald',backgroundImage: `url(${grid})`,backgroundSize: 'cover', backgroundPosition: 'center'}}>
       <div className="flex flex-col max-w-7xl lg:flex-row lg:items-center lg:justify-between">
         <div className="w-full md:w-1/2 lg:ml-16">
           <h2 className="text-3xl font-bold text-white">Register for <span className='text-red-600'> HACK - QUEST</span></h2>
